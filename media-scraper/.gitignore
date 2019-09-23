@@ -1,0 +1,14 @@
+__pycache__/
+.ipynb_checkpoints/
+download/
+download_*/
+webdriver/
+build/
+dist/
+credentials.json
+*.log
+test.*
+example_sites.txt
+*.spec
+error.txt
+debug.txt
