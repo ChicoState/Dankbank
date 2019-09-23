@@ -2,10 +2,10 @@
 
 ## Included in repo:
 
-**media-scraper**
+**media-scraper:** Directory containing the web scraper tool.
 
-**sampleImages**
+**sampleImages:** Directory containing sample pictures for testing.
 
-**script.sh**
+**script.sh:** Script to scrape images from web and read text from those pictures
 
-**textReader.py**
+**textReader.py:** Python file that reads text from a file specified in argv[1].
