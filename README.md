@@ -4,8 +4,5 @@
 
 **media-scraper:** Directory containing the web scraper tool.
 
-**sampleImages:** Directory containing sample pictures for testing.
+**FlaskTest.py:** Example showing how to connect to mysql db in Python.
 
-**script.sh:** Script to scrape images from web and read text from those pictures
-
-**textReader.py:** Python file that reads text from a file specified in argv[1].
