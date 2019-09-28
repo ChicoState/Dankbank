@@ -12,6 +12,11 @@ import shutil
 import time
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
+##adding imports for text reader
+from PIL import Image
+import pytesseract
+import sys
+import re
 
 
 class Downloader():
@@ -47,9 +52,16 @@ class Downloader():
         if res.status_code == 200:
             with open(filename, 'wb') as f:
                 shutil.copyfileobj(res.raw, f)
-            f = open("urls.txt","a") ##add img_url to urls.txt file
+            f = open("reddit.csv","a") ##csv file for reddit memes 3 columns:
+            #subreddit | link | text separated by commas
+            f.write(sys.argv[3])
+            f.write(",")
             f.write(img_url)
-            f.write("\n")
+            f.write(",") 
+            fn = re.search("[^/]+$",filename)
+            f.write("\"")
+            f.write(pytesseract.image_to_string(Image.open(fn.string)))
+            f.write("\"\n")
             #print(img_url)
             f.close()
             del res
