@@ -11,4 +11,4 @@ if __name__ == '__main__':
     scraper = mediascrapers.MediaScraper(mode='normal', debug=False)
     for url in sys.argv[1:]:
         tasks = scraper.scrape(url)
-        scraper.download(tasks=tasks, path='download/general')
+        scraper.download(tasks=tasks, path='download/')

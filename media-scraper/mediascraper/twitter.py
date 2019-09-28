@@ -16,4 +16,4 @@ if __name__ == '__main__':
         if username[0] == '@':
             username = username[1:]
         tasks = scraper.scrape(username)
-        scraper.download(tasks=tasks, path='download/twitter')
+        scraper.download(tasks=tasks, path='download/')

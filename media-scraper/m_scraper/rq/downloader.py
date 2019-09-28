@@ -47,6 +47,11 @@ class Downloader():
         if res.status_code == 200:
             with open(filename, 'wb') as f:
                 shutil.copyfileobj(res.raw, f)
+            f = open("urls.txt","a") ##add img_url to urls.txt file
+            f.write(img_url)
+            f.write("\n")
+            #print(img_url)
+            f.close()
             del res
         else:
             print('Filename:', filename)
