@@ -53,7 +53,7 @@ class Downloader():
             with open(filename, 'wb') as f:
                 shutil.copyfileobj(res.raw, f)
             fn = re.search("[^/]+$",filename)
-            print("fn == ",fn.string)
+            #print("fn == ",fn.string)
             txt = pytesseract.image_to_string(Image.open(fn.string))
             if txt != "": #read text from image, if not empty string add to csv
                 f = open("reddit.csv","a") ##csv file for reddit memes 3 columns:
