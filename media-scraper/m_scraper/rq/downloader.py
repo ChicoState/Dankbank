@@ -52,18 +52,21 @@ class Downloader():
         if res.status_code == 200:
             with open(filename, 'wb') as f:
                 shutil.copyfileobj(res.raw, f)
-            f = open("reddit.csv","a") ##csv file for reddit memes 3 columns:
-            #subreddit | link | text separated by commas
-            f.write(sys.argv[3])
-            f.write(",")
-            f.write(img_url)
-            f.write(",") 
             fn = re.search("[^/]+$",filename)
-            f.write("\"")
-            f.write(pytesseract.image_to_string(Image.open(fn.string)))
-            f.write("\"\n")
-            #print(img_url)
-            f.close()
+            print("fn == ",fn.string)
+            txt = pytesseract.image_to_string(Image.open(fn.string))
+            if txt != "": #read text from image, if not empty string add to csv
+                f = open("reddit.csv","a") ##csv file for reddit memes 3 columns:
+                #subreddit | link | text separated by commas
+                f.write(sys.argv[3])
+                f.write(",")
+                f.write(img_url)
+                f.write(",") 
+                f.write("\"")
+                f.write(txt)
+                f.write("\"\n")
+                f.close()
+            os.remove(fn.string)
             del res
         else:
             print('Filename:', filename)
