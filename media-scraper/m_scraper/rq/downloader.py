@@ -12,11 +12,27 @@ import shutil
 import time
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-##adding imports for text reader
+##adding imports for text reader and 
 from PIL import Image
 import pytesseract
 import sys
 import re
+import mysql.connector
+
+###mydb = mysql.connector.connect(
+#    host="34.82.36.144",
+#    user="root",
+#    passwd=sys.argv[4],
+#    database="Dankbase"
+#)
+
+
+#mycursor.execute("CREATE TABLE IF NOT EXISTS customers (name VARCHAR(255) PRIMARY KEY, address VARCHAR(255))")
+#sql = "INSERT INTO customers (name, address) VALUES (%s, %s)"
+#val = ("John", "Highway 21")
+#mycursor.execute(sql, val)
+
+#mydb.commit()
 
 
 class Downloader():
@@ -54,9 +70,13 @@ class Downloader():
                 shutil.copyfileobj(res.raw, f)
             fn = re.search("[^/]+$",filename)
             #print("fn == ",fn.string)
+            #print(sys.argv[4])
             txt = pytesseract.image_to_string(Image.open(fn.string))
             if txt != "": #read text from image, if not empty string add to csv
-                f = open("reddit.csv","a") ##csv file for reddit memes 3 columns:
+                #mycursor = mydb.cursor()
+                #mycursor.execute("show tables")
+                #mydb.commit()
+                f = open("data.csv","a") ##csv file for reddit memes 3 columns:
                 #subreddit | link | text separated by commas
                 f.write(sys.argv[3])
                 f.write(",")

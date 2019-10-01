@@ -49,7 +49,11 @@ def get_first_page(username):
     if shared_data is None:
         return None, None, None, None, None, None, None
     csrf_token = shared_data['config']['csrf_token']
-    rhx_gis = shared_data['rhx_gis']
+    if 'rhx_gis' in shared_data:
+        rhx_gis = shared_data['rhx_gis']
+    else:
+        shared_data['rhx_gis'] = ""
+        rhx_gis = shared_data['rhx_gis']
 
     user = shared_data['entry_data']['ProfilePage'][0]['graphql']['user']
     is_private = user['is_private']
