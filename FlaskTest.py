@@ -1,25 +1,21 @@
 from flask import Flask, jsonify
 import mysql.connector
+from getpass import getpass
 
 app = Flask(__name__)
 
 #TODO: Change all these values to actually connect to the database
-#TODO: how is this password going to work?
+#TODO: Is this method of entering the password secure enough?
+passw = getpass("Password: ")
+data = getpass("Database: ")
 mydb = mysql.connector.connect(
-    host="localhost",
+    host="34.82.36.144",
     user="root",
-    passwd="root",
-    database="test"
+    passwd=passw,
+    database=data
 )
 
 mycursor = mydb.cursor()
-
-mycursor.execute("CREATE TABLE IF NOT EXISTS customers (name VARCHAR(255) PRIMARY KEY, address VARCHAR(255))")
-sql = "INSERT INTO customers (name, address) VALUES (%s, %s)"
-val = ("John", "Highway 21")
-mycursor.execute(sql, val)
-
-mydb.commit()
 
 @app.route("/")
 def hello():
@@ -28,6 +24,6 @@ def hello():
 @app.route("/json")
 def jsoning():
     myfetch = mydb.cursor()
-    myfetch.execute("SELECT * FROM customers")
+    myfetch.execute("SELECT * FROM images")
     myresult = myfetch.fetchall()
     return jsonify(myresult)
