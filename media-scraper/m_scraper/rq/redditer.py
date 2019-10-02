@@ -52,8 +52,8 @@ class Redditer(Downloader):
 
         after = ''
         done = False
-
-        while not done:
+        remainingpics = 500
+        while remainingpics > 0 or not done:
             text = requests_get(self.api['posts'].format(subreddit, after), headers=headers)
             red = json.loads(text)
             print(len(red['data']['children']))
@@ -75,6 +75,7 @@ class Redditer(Downloader):
                 else:
                     self.safe_download(subreddit, name, img_url)
                 after = name
+                remainingpics = remainingpics - 1
 
             if len(red['data']['children']) == 0:
                 done = True
