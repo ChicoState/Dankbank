@@ -17,7 +17,7 @@ from PIL import Image
 import pytesseract
 import sys
 import re
-import mysql.connect
+import mysql.connector
 
 
 mydb = mysql.connector.connect(
