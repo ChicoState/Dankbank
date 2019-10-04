@@ -17,23 +17,16 @@ from PIL import Image
 import pytesseract
 import sys
 import re
-import mysql.connector
-
-###mydb = mysql.connector.connect(
-#    host="34.82.36.144",
-#    user="root",
-#    passwd=sys.argv[4],
-#    database="Dankbase"
-#)
 
 
-#mycursor.execute("CREATE TABLE IF NOT EXISTS customers (name VARCHAR(255) PRIMARY KEY, address VARCHAR(255))")
-#sql = "INSERT INTO customers (name, address) VALUES (%s, %s)"
-#val = ("John", "Highway 21")
-#mycursor.execute(sql, val)
+mydb = mysql.connector.connect(
+    host=sys.argv[4],
+    user=sys.argv[5],
+    passwd=sys.argv[6],
+    database=sys.argv[7]
+)
 
-#mydb.commit()
-
+mycursor = mydb.cursor()
 
 class Downloader():
     def __init__(self):
@@ -69,23 +62,15 @@ class Downloader():
             with open(filename, 'wb') as f:
                 shutil.copyfileobj(res.raw, f)
             fn = re.search("[^/]+$",filename)
-            #print("fn == ",fn.string)
-            #print(sys.argv[4])
             txt = pytesseract.image_to_string(Image.open(fn.string))
-            if txt != "": #read text from image, if not empty string add to csv
-                #mycursor = mydb.cursor()
-                #mycursor.execute("show tables")
-                #mydb.commit()
-                f = open("data.csv","a") ##csv file for reddit memes 3 columns:
-                #subreddit | link | text separated by commas
-                f.write(sys.argv[3])
-                f.write(",")
-                f.write(img_url)
-                f.write(",") 
-                f.write("\"")
-                f.write(txt)
-                f.write("\"\n")
-                f.close()
+            if txt != "": #read text from image, if not empty string add to database
+            	if sys.argv[2] == "instagram":
+            		sql = "INSERT INTO instagram_images (username,url,text) VALUES (%s,%s,%s)"
+   				if sys.argv[2] == "reddit":
+            		sql = "INSERT INTO reddit_images (subreddit,url,text) VALUES (%s,%s,%s)"            	
+            	val = (sys.argv[3], img_url, txt)
+            	mycursor.execute(sql,val)
+            	mydb.commit()
             os.remove(fn.string)
             del res
         else:
