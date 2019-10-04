@@ -12,11 +12,12 @@ import shutil
 import time
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-##adding imports for text reader and 
+##adding imports for text reader and
 from PIL import Image
 import pytesseract
 import sys
 import re
+import mysql.connect
 
 
 mydb = mysql.connector.connect(
@@ -44,10 +45,10 @@ class Downloader():
         parser.add_argument('-s', '--save_path', type=str, help='path to save')
         parser.add_argument('-e', '--early_stop', action='store_true')
         return parser.parse_args(args=args)
-    
+
     def crawl(self, keyword, early_stop):
         pass
-    
+
     def login(self, username, password):
         pass
 
@@ -64,13 +65,13 @@ class Downloader():
             fn = re.search("[^/]+$",filename)
             txt = pytesseract.image_to_string(Image.open(fn.string))
             if txt != "": #read text from image, if not empty string add to database
-            	if sys.argv[2] == "instagram":
-            		sql = "INSERT INTO instagram_images (username,url,text) VALUES (%s,%s,%s)"
-   				if sys.argv[2] == "reddit":
-            		sql = "INSERT INTO reddit_images (subreddit,url,text) VALUES (%s,%s,%s)"            	
-            	val = (sys.argv[3], img_url, txt)
-            	mycursor.execute(sql,val)
-            	mydb.commit()
+                if sys.argv[2] == "instagram":
+                    sql = "INSERT INTO instagram_images (username,url,text) VALUES (%s,%s,%s)"
+                if sys.argv[2] == "reddit":
+                    sql = "INSERT INTO reddit_images (subreddit,url,text) VALUES (%s,%s,%s)"
+                val = (sys.argv[3], img_url, txt)
+                mycursor.execute(sql,val)
+                mydb.commit()
             os.remove(fn.string)
             del res
         else:
@@ -78,17 +79,17 @@ class Downloader():
             print('Headers:', headers)
             raise Exception('Response status code: {:d}. {:s}'.format(res.status_code, img_url))
         return True
-    
+
     def run(self, args=None):
         args = self.parse(args)
         print(args)
 
         if args.save_path is not None:
             self.save_path = args.save_path
-        
+
         if args.credential_file is not None and os.path.exists(args.credential_file):
             self.credentials = json.load(open(args.credential_file, 'r', encoding='utf-8'))
-        
+
         if self.identifier in self.credentials:
             username = self.credentials[self.identifier]['username']
             password = self.credentials[self.identifier]['password']
