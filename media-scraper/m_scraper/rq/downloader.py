@@ -12,7 +12,7 @@ import shutil
 import time
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
-##adding imports for text reader and
+##adding imports for text reader and database
 from PIL import Image
 import pytesseract
 import sys
@@ -68,9 +68,9 @@ class Downloader():
                 txt = pytesseract.image_to_string(Image.open(fn.string))
                 if txt != "": #read text from image, if not empty string add to database
                     if sys.argv[2] == "instagram":
-                        sql = "INSERT INTO instagram_images (username,url,text) VALUES (%s,%s,%s)"
+                        sql = "INSERT IGNORE INTO instagram_images (username,url,text) VALUES (%s,%s,%s)"
                     if sys.argv[2] == "reddit":
-                        sql = "INSERT INTO reddit_images (subreddit,url,text) VALUES (%s,%s,%s)"
+                        sql = "INSERT IGNORE INTO reddit_images (subreddit,url,text) VALUES (%s,%s,%s)"
                     val = (sys.argv[3], img_url, txt)
                     mycursor.execute(sql,val)
                     mydb.commit()
