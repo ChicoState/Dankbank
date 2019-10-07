@@ -64,7 +64,7 @@ class Downloader():
                 shutil.copyfileobj(res.raw, f)
             fn = re.search("[^/]+$",filename)
             fname, fextension  = os.path.splitext(fn.string)
-            if fextension != ".gif" and fextension != ".mp4" and fextension != ".mov" and fextension != ".flv":
+            if fextension != ".gif" and fextension != ".mp4" and fextension != ".mov" and fextension != ".flv" and fextension != ".gifv":
                 txt = pytesseract.image_to_string(Image.open(fn.string))
                 if txt != "": #read text from image, if not empty string add to database
                     if sys.argv[2] == "instagram":
