@@ -63,15 +63,17 @@ class Downloader():
             with open(filename, 'wb') as f:
                 shutil.copyfileobj(res.raw, f)
             fn = re.search("[^/]+$",filename)
-            txt = pytesseract.image_to_string(Image.open(fn.string))
-            if txt != "": #read text from image, if not empty string add to database
-                if sys.argv[2] == "instagram":
-                    sql = "INSERT INTO instagram_images (username,url,text) VALUES (%s,%s,%s)"
-                if sys.argv[2] == "reddit":
-                    sql = "INSERT INTO reddit_images (subreddit,url,text) VALUES (%s,%s,%s)"
-                val = (sys.argv[3], img_url, txt)
-                mycursor.execute(sql,val)
-                mydb.commit()
+            fname, fextension  = os.path.splitext(fn.string)
+            if fextension != ".gif" and fextension != ".mp4" and fextension != ".mov" and fextension != ".flv":
+                txt = pytesseract.image_to_string(Image.open(fn.string))
+                if txt != "": #read text from image, if not empty string add to database
+                    if sys.argv[2] == "instagram":
+                        sql = "INSERT INTO instagram_images (username,url,text) VALUES (%s,%s,%s)"
+                    if sys.argv[2] == "reddit":
+                        sql = "INSERT INTO reddit_images (subreddit,url,text) VALUES (%s,%s,%s)"
+                    val = (sys.argv[3], img_url, txt)
+                    mycursor.execute(sql,val)
+                    mydb.commit()
             os.remove(fn.string)
             del res
         else:
