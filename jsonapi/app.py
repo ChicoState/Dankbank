@@ -3,22 +3,23 @@ from starlette.applications import Starlette
 # Fallback to JSON instead of UJSON in case of errors in the jsons.
 from starlette.responses import UJSONResponse, PlainTextResponse, JSONResponse
 from starlette.staticfiles import StaticFiles
+from starlette.config import Config
 import mysql.connector
 import json
-from getpass import getpass
+import pathlib
+
+config = Config(pathlib.Path(__file__).parent.parent / '.env')
+HOST = config('DATABASE_URL')
+PASSWORD = config('SECRET_KEY')
 
 app = Starlette()
-app.debug = True
+app.debug = config('DEBUG')
 
-#TODO: Change all these values to actually connect to the database
-#TODO: Is this method of entering the password secure enough?
-passw = getpass("Password: ")
-database = getpass("Database: ")
 mydb = mysql.connector.connect(
-    host="34.82.36.144",
+    host=HOST,
     user="root",
-    passwd=passw,
-    database=database
+    passwd=PASSWORD,
+    database="Dankbase"
 )
 
 mycursor = mydb.cursor()
