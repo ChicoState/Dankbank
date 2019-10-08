@@ -13,27 +13,27 @@ app.debug = True
 #TODO: Change all these values to actually connect to the database
 #TODO: Is this method of entering the password secure enough?
 passw = getpass("Password: ")
-data = getpass("Database: ")
+database = getpass("Database: ")
 mydb = mysql.connector.connect(
     host="34.82.36.144",
     user="root",
     passwd=passw,
-    database=data
+    database=database
 )
 
 mycursor = mydb.cursor()
 
 @app.route("/")
-def test(request):
+async def test(request):
     return PlainTextResponse("Hello world!")
 
 @app.route("/json")
-def jsoning():
+async def jsoning(request):
     myfetch = mydb.cursor()
-    myfetch.execute("SELECT * FROM images")
+    myfetch.execute("SELECT * FROM instagram_images")
     row_headers = [h[0] for h in myfetch.description]
     myresult = myfetch.fetchall()
     json_data = []
     for result in myresult:
         json_data.append(dict(zip(row_headers, result)))
-    return json.dumps(json_data)
+    return JSONResponse(json_data)
