@@ -1,7 +1,7 @@
 from starlette.applications import Starlette
 # UJSON is highly optimized, but does not handle all edge cases.
 # Fallback to JSON instead of UJSON in case of errors in the jsons.
-from starlette.responses import UJSONResponse, PlainTextReponse, JSONResponse
+from starlette.responses import UJSONResponse, PlainTextResponse, JSONResponse
 from starlette.staticfiles import StaticFiles
 import mysql.connector
 import json
