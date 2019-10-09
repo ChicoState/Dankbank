@@ -75,6 +75,8 @@ class Downloader():
                         sql = "INSERT IGNORE INTO instagram_images (username,url,text) VALUES (%s,%s,%s)"
                     if sys.argv[2] == "reddit":
                         sql = "INSERT IGNORE INTO reddit_images (subreddit,url,text) VALUES (%s,%s,%s)"
+                    if sys.argv[2] == "tumblr":
+                    	sql = "INSERT IGNORE INTO tumblr_images (username,url,text) VALUES (%s,%s,%s)"
                     val = (sys.argv[3], img_url, txt)
                     mycursor.execute(sql,val)
                     mydb.commit()
