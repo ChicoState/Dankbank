@@ -13,18 +13,22 @@ import time
 from requests.packages.urllib3.exceptions import InsecureRequestWarning
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 ##adding imports for text reader and database
+from os.path import join, dirname
 from PIL import Image
 import pytesseract
 import sys
 import re
 import mysql.connector
+from dotenv import load_dotenv
+from pathlib import Path
 
-
+env_path = join(dirname(__file__), '.env')
+load_dotenv(env_path)
 mydb = mysql.connector.connect(
-    host=sys.argv[4],
-    user=sys.argv[5],
-    passwd=sys.argv[6],
-    database=sys.argv[7]
+    host=os.getenv("HOST"),
+    user="root",
+    passwd=os.getenv("PASSWORD"),
+    database="Dankbase"
 )
 
 mycursor = mydb.cursor()
