@@ -4,6 +4,8 @@
 
 import 'package:flutter/material.dart';
 import 'package:english_words/english_words.dart';
+import 'meme.dart';
+import 'dart:io';
 
 void main() => runApp(MyApp());
 
@@ -15,83 +17,106 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: Colors.white,
       ),
-      home: RandomWords(),
+      home: MemeList(),
     );
   }
 }
 
-class RandomWords extends StatefulWidget {
+class MemeList extends StatefulWidget {
+
   @override
-  RandomWordsState createState() => RandomWordsState();
+  Widget build(BuildContext context) {
+    return GridView.count(
+      crossAxisCount: 2,
+      // children: MemeCardList
+    );
+  }
+
+  @override
+  MemeListState createState() => MemeListState();
 }
 
-
-class RandomWordsState extends State<RandomWords> {
+class MemeListState extends State<MemeList> {
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Startup Name Generator'),
+        title: Text('Memes'),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
         ],
       ),
-      body: _buildSuggestions(),
+      body: _buildMemeList(),
     );
   }
 
-  final _suggestions = <WordPair>[];
-  final _saved = Set<WordPair>();
-  final _biggerFont = const TextStyle(fontSize: 18.0);
+  final _testJson = "";
+  final _memes = <Meme>[];
+  final _favorites = Set<Meme>();
+  final _biggerFont = const TextStyle(fontSize: 16.0);
 
-  Widget _buildSuggestions() {
-    return ListView.builder(
-      padding: const EdgeInsets.all(16.0),
-      itemBuilder: (context, i) {
-        if (i.isOdd) return Divider();
+  Widget _buildMemeList() {
 
-        final index = i ~/ 2;
-        if (index >= _suggestions.length) {
-          _suggestions.addAll(generateWordPairs().take(10));
-        }
-        return _buildRow(_suggestions[index]);
+    // TODO: turn the json into a list of memes
+
+    final Iterable<ListTile> tiles =_memes.map(
+      (Meme meme) {
+        return ListTile(
+          title : Text(
+            meme.url,
+            style: _biggerFont,
+          ),
+        );
       }
     );
+
+    final List<ListTile> memes = ListTile
+      .divideTiles(
+        context: context,
+        tiles: tiles,
+      ).toList();
+
+    return ListView(children : memes);
   }
 
   Widget _buildRow(WordPair pair) {
-    final bool alreadySaved = _saved.contains(pair);
-    return ListTile(
-      title: Text(
-        pair.asPascalCase,
-        style: _biggerFont,
-      ),
-      trailing: Icon(
-        alreadySaved? Icons.favorite : Icons.favorite_border,
-        color: alreadySaved? Colors.red : null,
-      ),
-      onTap: () {
-        setState(() {
-          if (alreadySaved) {
-            _saved.remove(pair);
-          } else {
-            _saved.add(pair);
-          }
-        });
-      },
-    );
+    // TODO: Get more results from the database to expand the list?
+//    final bool alreadySaved = _favorites.contains(pair);
+//    return ListTile(
+//      title: Text(
+//        pair.asPascalCase,
+//        style: _biggerFont,
+//      ),
+//      trailing: Icon(
+//        alreadySaved? Icons.favorite : Icons.favorite_border,
+//        color: alreadySaved? Colors.red : null,
+//      ),
+//      onTap: () {
+//        setState(() {
+//          if (alreadySaved) {
+//            _favorites.remove(pair);
+//          } else {
+//            _favorites.add(pair);
+//          }
+//        });
+//      },
+//    );
+  }
+
+  void _pushEnlarge() {
+
   }
 
   void _pushSaved() {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (BuildContext context) {
-          final Iterable<ListTile> tiles = _saved.map(
-              (WordPair pair) {
+          final Iterable<ListTile> tiles = _favorites.map(
+              (Meme pair) {
                 return ListTile(
                   title: Text(
-                    pair.asPascalCase,
+                    pair.url,
                     style: _biggerFont,
                   ),
                 );
