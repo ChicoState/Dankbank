@@ -1,23 +1,31 @@
+import 'package:json_annotation/json_annotation.dart';
+
+part 'meme.g.dart';
+
+@JsonSerializable(explicitToJson: true)
 class Meme {
+
+  Meme(this.username, this.url, this.text);
 
   final String username;
   final String url;
   final String text;
 
-  Meme(this.username, this.url, this.text);
+  factory Meme.fromJson(Map<String, dynamic> json) => _$MemeFromJson(json);
 
-  Meme.fromJson(Map<String, dynamic> json)
-      :
-        username = json['username'],
-        url = json['url'],
-        text = json['text'];
+  Map<String, dynamic> toJson() => _$MemeToJson(this);
+}
 
-  Map<String, dynamic> toJson() =>
-      {
-        'username': username,
-        'url': url,
-        'text': text,
-      };
+@JsonSerializable()
+class MemeList {
+
+  MemeList(this.memes);
+
+  final Map<String, dynamic> memes;
+
+  factory MemeList.fromJson(Map<String, dynamic> json) => _$MemeListFromJson(json);
+
+  Map<String, dynamic> toJson() => _$MemeListToJson(this);
 }
 
 // TODO: Remove this function.

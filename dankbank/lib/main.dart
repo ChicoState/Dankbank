@@ -4,6 +4,8 @@
 
 import 'package:flutter/material.dart';
 import 'meme.dart';
+import 'package:flutter/services.dart';
+import 'dart:convert';
 
 void main() => runApp(MyApp());
 
@@ -30,6 +32,12 @@ class MemeListState extends State<MemeList> {
 
   @override
   Widget build(BuildContext context) {
+    rootBundle.loadString('assets/hardcode.json').then(
+        (str) {
+          List memes = jsonDecode(str);
+          _suggestions.addAll(memes.map((m) => Meme.fromJson(m)).toList());
+        }
+    );
     return Scaffold(
       appBar: AppBar(
         title: Text('The Vault'),
@@ -49,13 +57,16 @@ class MemeListState extends State<MemeList> {
     return ListView.builder(
         padding: const EdgeInsets.all(16.0),
         itemBuilder: (context, i) {
-          if (i.isOdd) return Divider();
+          if (i < _suggestions.length) {
+            if (i.isOdd) return Divider();
 
-          final index = i ~/ 2;
-          if (index >= _suggestions.length) {
-            _suggestions.addAll(generateTestMemes().take(10));
+            final index = i ~/ 2;
+            //          if (index >= _suggestions.length) {
+            //            _suggestions.addAll(generateTestMemes().take(10));
+            //          }
+            return _buildRow(_suggestions[index]);
           }
-          return _buildRow(_suggestions[index]);
+          return _buildRow(generateTestMemes().first);
         }
     );
   }
