@@ -3,9 +3,7 @@
 // found in the LICENSE file.
 
 import 'package:flutter/material.dart';
-import 'package:english_words/english_words.dart';
 import 'meme.dart';
-import 'dart:io';
 
 void main() => runApp(MyApp());
 
@@ -23,18 +21,10 @@ class MyApp extends StatelessWidget {
 }
 
 class MemeList extends StatefulWidget {
-
-  @override
-  Widget build(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: 2,
-      // children: MemeCardList
-    );
-  }
-
   @override
   MemeListState createState() => MemeListState();
 }
+
 
 class MemeListState extends State<MemeList> {
 
@@ -42,96 +32,81 @@ class MemeListState extends State<MemeList> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Memes'),
+        title: Text('The Vault'),
         actions: <Widget>[
           IconButton(icon: Icon(Icons.list), onPressed: _pushSaved),
         ],
       ),
-      body: _buildMemeList(),
+      body: _buildSuggestions(),
     );
   }
 
-  final _testJson = "";
-  final _memes = <Meme>[];
-  final _favorites = Set<Meme>();
-  final _biggerFont = const TextStyle(fontSize: 16.0);
+  final _suggestions = <Meme>[];
+  final _saved = Set<Meme>();
+  final _biggerFont = const TextStyle(fontSize: 18.0);
 
-  Widget _buildMemeList() {
+  Widget _buildSuggestions() {
+    return ListView.builder(
+        padding: const EdgeInsets.all(16.0),
+        itemBuilder: (context, i) {
+          if (i.isOdd) return Divider();
 
-    // TODO: turn the json into a list of memes
-
-    final Iterable<ListTile> tiles =_memes.map(
-      (Meme meme) {
-        return ListTile(
-          title : Text(
-            meme.url,
-            style: _biggerFont,
-          ),
-        );
-      }
+          final index = i ~/ 2;
+          if (index >= _suggestions.length) {
+            _suggestions.addAll(generateTestMemes().take(10));
+          }
+          return _buildRow(_suggestions[index]);
+        }
     );
-
-    final List<ListTile> memes = ListTile
-      .divideTiles(
-        context: context,
-        tiles: tiles,
-      ).toList();
-
-    return ListView(children : memes);
   }
 
-  Widget _buildRow(WordPair pair) {
-    // TODO: Get more results from the database to expand the list?
-//    final bool alreadySaved = _favorites.contains(pair);
-//    return ListTile(
-//      title: Text(
-//        pair.asPascalCase,
-//        style: _biggerFont,
-//      ),
-//      trailing: Icon(
-//        alreadySaved? Icons.favorite : Icons.favorite_border,
-//        color: alreadySaved? Colors.red : null,
-//      ),
-//      onTap: () {
-//        setState(() {
-//          if (alreadySaved) {
-//            _favorites.remove(pair);
-//          } else {
-//            _favorites.add(pair);
-//          }
-//        });
-//      },
-//    );
-  }
-
-  void _pushEnlarge() {
-
+  Widget _buildRow(Meme meme) {
+    final bool alreadySaved = _saved.contains(meme);
+    return ListTile(
+      title: Text(
+        meme.url,
+        style: _biggerFont,
+      ),
+      trailing: Icon(
+        alreadySaved? Icons.favorite : Icons.favorite_border,
+        color: alreadySaved? Colors.red : null,
+      ),
+      onTap: () {
+        setState(() {
+          if (alreadySaved) {
+            _saved.remove(meme);
+          } else {
+            _saved.add(meme);
+          }
+        });
+      },
+    );
   }
 
   void _pushSaved() {
     Navigator.of(context).push(
       MaterialPageRoute<void>(
         builder: (BuildContext context) {
-          final Iterable<ListTile> tiles = _favorites.map(
-              (Meme pair) {
-                return ListTile(
-                  title: Text(
-                    pair.url,
-                    style: _biggerFont,
-                  ),
-                );
-              },
+          final Iterable<ListTile> tiles = _saved.map(
+                (Meme meme) {
+              return ListTile(
+                title: Text(
+                  meme.url,
+                  style: _biggerFont,
+                ),
+              );
+            },
           );
           final List<Widget> divided = ListTile
-            .divideTiles(
-              context: context,
-              tiles: tiles,
-            )
-            .toList();
+              .divideTiles(
+            context: context,
+            tiles: tiles,
+          )
+              .toList();
 
           return Scaffold(
             appBar: AppBar(
-              title: Text('Saved Suggestions')
+                title: Text('Saved Suggestions')
             ),
             body: ListView(children: divided),
           );

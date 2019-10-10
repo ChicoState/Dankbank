@@ -19,3 +19,12 @@ class Meme {
         'text': text,
       };
 }
+
+// TODO: Remove this function.
+// Perhaps we can use similar functionality to download/process data as needed
+Iterable<Meme> generateTestMemes() sync* {
+  final meme = Meme('a', 'b', 'c');
+  for (;;) {
+    yield meme;
+  }
+}
