@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'meme.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
+import 'package:cached_network_image/cached_network_image.dart';
 
 void main() => runApp(MyApp());
 
@@ -74,9 +75,10 @@ class MemeListState extends State<MemeList> {
   Widget _buildRow(Meme meme) {
     final bool alreadySaved = _saved.contains(meme);
     return ListTile(
-      title: Text(
-        meme.url,
-        style: _biggerFont,
+      title: CachedNetworkImage(
+        imageUrl: meme.url,
+        placeholder: (context, url) => new CircularProgressIndicator(),
+        errorWidget: (context, url, error) => new Icon(Icons.error),
       ),
       trailing: Icon(
         alreadySaved? Icons.favorite : Icons.favorite_border,
