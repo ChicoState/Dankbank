@@ -31,7 +31,7 @@ class MemeList {
 // TODO: Remove this function.
 // Perhaps we can use similar functionality to download/process data as needed
 Iterable<Meme> generateTestMemes() sync* {
-  final meme = Meme('a', 'b', 'c');
+  final meme = Meme('a', 'example.com', 'c');
   for (;;) {
     yield meme;
   }
