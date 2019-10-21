@@ -34,8 +34,8 @@ class Instagramer(Downloader):
                     success = True
                 except Exception as e:
                     print(e)
-                    print('Sleep for 1 hour...')
-                    time.sleep(1 * 60 * 60)
+                    print('Sleep for 1 minute...')
+                    time.sleep(1 * 60)
             success = success and res
             if early_stop and not success:
                 return res
