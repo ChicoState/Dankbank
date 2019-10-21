@@ -39,8 +39,8 @@ class Redditer(Downloader):
             except Exception as e:
                 print(e)
                 print(img_url, filename)
-                print('Sleep for 1 hour...')
-                time.sleep(1*60*60)
+                print('Sleep for 1 minute...')
+                time.sleep(1*60)
 
     def crawl(self, subreddit, early_stop=False):
         print('Redditer Task:', subreddit)
