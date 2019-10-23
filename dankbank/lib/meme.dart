@@ -1,38 +1,65 @@
 import 'package:json_annotation/json_annotation.dart';
 
-part 'meme.g.dart';
-
-@JsonSerializable(explicitToJson: true)
+//@JsonSerializable(explicitToJson: true)
 class Meme {
 
-  Meme(this.username, this.url, this.text);
+  Meme({this.username, this.url, this.text});
 
   final String username;
   final String url;
   final String text;
 
-  factory Meme.fromJson(Map<String, dynamic> json) => _$MemeFromJson(json);
+  factory Meme.fromJson(Map<String, dynamic> json) {
+    return new Meme(
+      username: json['username'],
+      url: json['url'],
+      text: json['text']
+    );
+  }
 
-  Map<String, dynamic> toJson() => _$MemeToJson(this);
+  Map<String, dynamic> toJson() =>
+    {
+      'username': username,
+      'url': url,
+      'text': text,
+    };
 }
 
-@JsonSerializable()
+//@JsonSerializable(explicitToJson: true)
 class MemeList {
 
-  MemeList(this.memes);
+  final List<Meme> memes;
+  MemeList({
+    this.memes,
+  });
 
-  final Map<String, dynamic> memes;
-
-  factory MemeList.fromJson(Map<String, dynamic> json) => _$MemeListFromJson(json);
-
-  Map<String, dynamic> toJson() => _$MemeListToJson(this);
+  factory MemeList.fromJson(List<dynamic> parsedJson) {
+    List<Meme> memes = new List<Meme>();
+    memes = parsedJson.map((m)=>Meme.fromJson(m)).toList();
+    return new MemeList(memes: memes);
+  }
 }
 
 // TODO: Remove this function.
 // Perhaps we can use similar functionality to download/process data as needed
 Iterable<Meme> generateTestMemes() sync* {
-  final meme = Meme('a', 'example.com', 'c');
+  final meme = Meme(username:'a', url:'example.com', text:'c');
   for (;;) {
     yield meme;
   }
+}
+
+class TestPost {
+  TestPost(this.userId, this.id, this.title, this.body);
+
+  final int userId;
+  final int id;
+  final String title;
+  final String body;
+
+  TestPost.fromJson(Map<String, dynamic> json) :
+        userId = json['userId'],
+        id = json['id'],
+        title = json['title'],
+        body = json['body'];
 }
