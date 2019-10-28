@@ -7,19 +7,55 @@ import 'meme.dart';
 import 'package:flutter/services.dart';
 import 'dart:convert';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:floating_search_bar/floating_search_bar.dart';
 
 void main() => runApp(MyApp());
 
 class MyApp extends StatelessWidget {
   @override
+  //_SearchBar createState() => _SearchBar();
+  Widget build(BuildContext context) {
+    return Center(
+      child: MaterialApp(
+        title: 'Startup Name Generator',
+        theme: ThemeData(
+          primaryColor: Colors.white,
+        ),
+        home: MemeList(),
+      ),
+    );
+  }
+}
+
+class SearchBar extends StatefulWidget {
+  @override
+  _SearchBar createState() => _SearchBar();
+}
+
+class _SearchBar extends State<SearchBar> {
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Startup Name Generator',
-      theme: ThemeData(
-        primaryColor: Colors.white,
-      ),
-      home: MemeList(),
-    );
+        home: FloatingSearchBar.builder(
+        itemCount: 3,
+        itemBuilder: (BuildContext context, int index) {
+          return ListTile(
+            leading: Text(index.toString()),
+          );
+        },
+        trailing: CircleAvatar(
+          child: Text("RD"),
+        ),
+/*        drawer: Drawer(
+          child: Container(),
+        ), */
+        onChanged: (String value) {},
+        onTap: () {},
+        decoration: InputDecoration.collapsed(
+          hintText: "Search...",
+        ),
+        ),
+      );
   }
 }
 
@@ -34,9 +70,10 @@ class MemeListState extends State<MemeList> {
   @override
   Widget build(BuildContext context) {
     rootBundle.loadString('assets/hardcode.json').then(
-        (str) {
+        (str) async {
           List memes = jsonDecode(str);
-          _suggestions.addAll(memes.map((m) => Meme.fromJson(m)).toList());
+           // _suggestions.clear();
+            _suggestions.addAll(memes.map((m) => Meme.fromJson(m)).toList());
         }
     );
     return Scaffold(
@@ -47,6 +84,21 @@ class MemeListState extends State<MemeList> {
         ],
       ),
       body: _buildSuggestions(),
+      bottomNavigationBar: BottomAppBar(
+        //child: SearchBar(),
+          child: IconButton(icon: Icon(Icons.search), onPressed: _SearchBar),
+      ),
+    );
+  }
+
+  void _SearchBar() {
+    Navigator.of(context).push(
+        MaterialPageRoute<void>(
+            builder: (BuildContext context) {
+              return Scaffold(
+                body: SearchBar(),
+              );
+            })
     );
   }
 
@@ -56,6 +108,7 @@ class MemeListState extends State<MemeList> {
 
   Widget _buildSuggestions() {
     return ListView.builder(
+        itemCount: _suggestions.length,
         padding: const EdgeInsets.all(16.0),
         itemBuilder: (context, i) {
           if (i < _suggestions.length) {
@@ -103,9 +156,10 @@ class MemeListState extends State<MemeList> {
           final Iterable<ListTile> tiles = _saved.map(
                 (Meme meme) {
               return ListTile(
-                title: Text(
-                  meme.url,
-                  style: _biggerFont,
+                title: CachedNetworkImage(
+                  imageUrl: meme.url,
+                  placeholder: (context, url) => new CircularProgressIndicator(),
+                  errorWidget: (context, url, error) => new Icon(Icons.error),
                 ),
               );
             },
