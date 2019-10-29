@@ -37,6 +37,7 @@ class _SearchBar extends State<SearchBar> {
   Widget build(BuildContext context) {
     return MaterialApp(
         home: FloatingSearchBar.builder(
+          //preceding is a placeholder for the search page.  To send search query to database and display results, the code below will need to be changed.
         itemCount: 3,
         itemBuilder: (BuildContext context, int index) {
           return ListTile(
