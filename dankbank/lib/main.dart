@@ -4,26 +4,8 @@
 
 import 'package:flutter/material.dart';
 import 'meme.dart';
-import 'package:flutter/services.dart';
-import 'dart:convert';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:http/http.dart' as http;
-
-Future<MemeList> fetchMemes() async {
-  final response = await http.get('http://35.209.126.69/json');
-
-  if (response.statusCode == 200) {
-    return MemeList.fromJson(json.decode(response.body));
-  } else {
-    throw Exception('Failed to load memes');
-  }
-//  final response = await http.get('https://jsonplaceholder.typicode.com/posts');
-//  if (response.statusCode == 200) {
-//    return jsonDecode(response.body).map((m) => TestPost.fromJson(m)).toList();
-//  } else {
-//    throw Exception('Failed to load test post');
-//  }
-}
+import 'Home.dart';
+import 'DisplayList.dart';
 
 void main() => runApp(MyApp(memes: fetchMemes()));
 
@@ -40,36 +22,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.purple[900],
         canvasColor: Colors.purple[100],
       ),
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('The Vault'),
-        ),
-        body: Center(
-          child: FutureBuilder<MemeList>(
-            future: memes,
-            builder: (context, snapshot) {
-              if (snapshot.hasData) {
-                List <Meme> myMemes = snapshot.data.memes;
-                return ListView.builder(
-                  itemCount: myMemes.length,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(
-                      title: CachedNetworkImage(
-                        imageUrl:myMemes[index].url,
-                        placeholder: (context, url) => new CircularProgressIndicator(),
-                        errorWidget: (context, url, error) => new Icon(Icons.error),
-                      ),
-                    );
-                  }
-                );
-              } else if (snapshot.hasError) {
-                return Text("${snapshot.error}");
-              }
-              return CircularProgressIndicator();
-            },
-          ),
-        ),
-      ),
+      home: Home(),
     );
   }
 }
@@ -104,15 +57,6 @@ class MyApp extends StatelessWidget {
 //    return MemeListState();
 //  }
 //}
-//
-//FutureBuilder<MemeList>(
-//  future: fetchMemes(),
-//  builder: (context, snapshot) {
-//    if (snapshot.hasdata) {
-//
-//    }
-//  }
-//);
 //
 //class MemeListState extends State<MemeList> {
 //

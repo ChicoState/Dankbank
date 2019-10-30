@@ -1,6 +1,3 @@
-import 'package:json_annotation/json_annotation.dart';
-
-//@JsonSerializable(explicitToJson: true)
 class Meme {
 
   Meme({this.username, this.url, this.text});
@@ -25,7 +22,6 @@ class Meme {
     };
 }
 
-//@JsonSerializable(explicitToJson: true)
 class MemeList {
 
   final List<Meme> memes;
@@ -37,15 +33,6 @@ class MemeList {
     List<Meme> memes = new List<Meme>();
     memes = parsedJson.map((m)=>Meme.fromJson(m)).toList();
     return new MemeList(memes: memes);
-  }
-}
-
-// TODO: Remove this function.
-// Perhaps we can use similar functionality to download/process data as needed
-Iterable<Meme> generateTestMemes() sync* {
-  final meme = Meme(username:'a', url:'example.com', text:'c');
-  for (;;) {
-    yield meme;
   }
 }
 
