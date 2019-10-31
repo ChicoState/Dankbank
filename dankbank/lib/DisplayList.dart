@@ -4,7 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'meme.dart';
-
+final _saved = Set<Meme>();
 Future<MemeList> fetchMemes() async {
   try {
     final response = await http.get('http://35.209.126.69/json');
@@ -27,9 +27,11 @@ class DisplayList extends StatefulWidget {
   }
 }
 
+
+
 class DisplayListState extends State<DisplayList> {
   final Future<MemeList>_memes = fetchMemes();
-  final _saved = Set<Meme>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -74,4 +76,9 @@ class DisplayListState extends State<DisplayList> {
       )
     );
   }
+
+}
+
+Save() {
+  return _saved;
 }

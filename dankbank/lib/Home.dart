@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'DisplayList.dart';
 import 'Search.dart';
+import 'Favorites.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -18,6 +19,12 @@ class HomeState extends State<Home> {
         actions: <Widget>[
           IconButton(
               icon: Icon(Icons.list),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => Favorites()),
+                );
+              }
           ),
           IconButton(
               icon: Icon(Icons.search),

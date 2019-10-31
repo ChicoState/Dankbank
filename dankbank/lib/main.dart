@@ -7,6 +7,7 @@ import 'meme.dart';
 import 'Home.dart';
 import 'DisplayList.dart';
 
+
 void main() => runApp(MyApp(memes: fetchMemes()));
 
 class MyApp extends StatelessWidget {
