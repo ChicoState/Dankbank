@@ -23,6 +23,7 @@ debug.txt
 .history
 .svn/
 .env
+google-services.json
 
 # IntelliJ related
 *.iml
@@ -79,6 +80,8 @@ debug.txt
 **/ios/Flutter/flutter_export_environment.sh
 **/ios/ServiceDefinitions.json
 **/ios/Runner/GeneratedPluginRegistrant.*
+
+
 
 # Exceptions to above rules.
 !**/ios/**/default.mode1v3
