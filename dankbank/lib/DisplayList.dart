@@ -4,10 +4,14 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'meme.dart';
+
+
 final _saved = Set<Meme>();
-Future<MemeList> fetchMemes() async {
+
+Future<MemeList> fetchMemes({String search:""}) async {
   try {
-    final response = await http.get('http://35.209.126.69/json');
+    final response = await http.get('http://35.209.126.69/'
+        + search == "" ? 'json' : search);
 
     if (response.statusCode == 200) {
       return MemeList.fromJson(json.decode(response.body));
@@ -21,24 +25,24 @@ Future<MemeList> fetchMemes() async {
 }
 
 class DisplayList extends StatefulWidget {
+  const DisplayList({Key key, this.search}): super(key: key);
+
+  final String search;
+
   @override
   DisplayListState createState() {
     return DisplayListState();
   }
 }
 
-
-
 class DisplayListState extends State<DisplayList> {
-  final Future<MemeList>_memes = fetchMemes();
-
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
         child: FutureBuilder<MemeList>(
-          future: _memes,
+          future: fetchMemes(search:widget.search),
           builder: (context, snapshot) {
             if (snapshot.hasData) {
               List <Meme> myMemes = snapshot.data.memes;
