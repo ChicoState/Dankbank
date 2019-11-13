@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:floating_search_bar/floating_search_bar.dart';
+import 'BottomAppBar.dart';
 
 class Search extends StatefulWidget {
   @override
@@ -28,6 +29,7 @@ class SearchState extends State<Search> {
           hintText: "Search...",
         ),
       ),
+      bottomNavigationBar: BottomBar(),
     );
   }
 }

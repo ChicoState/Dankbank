@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'DisplayList.dart';
 import 'meme.dart';
+import 'BottomAppBar.dart';
 
 class Favorites extends StatefulWidget {
   @override
@@ -35,6 +36,7 @@ class FavoritesState extends State<Favorites> {
             title: Text('Favorites')
         ),
         body: ListView(children: divided),
+      bottomNavigationBar: BottomBar(),
     );
   }
 }

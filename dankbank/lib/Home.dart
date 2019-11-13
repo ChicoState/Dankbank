@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'DisplayList.dart';
 import 'Search.dart';
-import 'Favorites.dart';
+import 'BottomAppBar.dart';
 
 class Home extends StatefulWidget {
   @override
@@ -18,11 +18,11 @@ class HomeState extends State<Home> {
         title: Text('The Vault'),
         actions: <Widget>[
           IconButton(
-              icon: Icon(Icons.list),
+              icon: Icon(Icons.mail),
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => Favorites()),
+                  MaterialPageRoute(builder: (context) => Search()),
                 );
               }
           ),
@@ -37,6 +37,7 @@ class HomeState extends State<Home> {
           ),
         ]
       ),
+      bottomNavigationBar: BottomBar(),
       body: DisplayList(),
     );
   }
