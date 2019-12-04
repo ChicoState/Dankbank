@@ -3,8 +3,8 @@ import 'package:flutter/services.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'future_or_builder.dart';
 import 'meme.dart';
-
 
 final _saved = Set<Meme>();
 
@@ -25,9 +25,10 @@ Future<MemeList> fetchMemes({String search:""}) async {
 }
 
 class DisplayList extends StatefulWidget {
-  const DisplayList({Key key, this.search}): super(key: key);
+  DisplayList({Key key, this.search, this.memes}): super(key: key);
 
   final String search;
+  final MemeList memes;
 
   @override
   DisplayListState createState() {
@@ -41,11 +42,12 @@ class DisplayListState extends State<DisplayList> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
-        child: FutureBuilder<MemeList>(
-          future: fetchMemes(search:widget.search),
+        child: FutureOrBuilder<MemeList>(
+//          futureOr: fetchMemes(search:widget.search),
+          futureOr: widget.memes,
           builder: (context, snapshot) {
             if (snapshot.hasData) {
-              List <Meme> myMemes = snapshot.data.memes;
+              List <Meme> myMemes = snapshot.memes;
               return ListView.builder(
                 itemCount: myMemes.length,
                 itemBuilder: (BuildContext context, int index) {

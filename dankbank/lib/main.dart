@@ -6,14 +6,30 @@ import 'package:flutter/material.dart';
 import 'meme.dart';
 import 'Home.dart';
 import 'DisplayList.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_database/firebase_database.dart';
 
 
-void main() => runApp(MyApp(memes: fetchMemes()));
+Future<void> main() async {
+  final FirebaseApp app = await FirebaseApp.configure(
+    name: 'memes',
+    options: const FirebaseOptions(
+      googleAppID: '1:994973522467:android:9c488ff3baadefe06fef96',
+      apiKey: 'AIzaSyA0uSzPacdqMT9Trc2rByLoPOA7Oz6vVHo',
+      databaseURL: 'https://ceremonial-team-229918.firebaseio.com/'
+    ),
+  );
+  runApp(MyApp(
+      memes: fetchMemes(),
+      app: app
+  ));
+}
 
 class MyApp extends StatelessWidget {
   final Future<MemeList> memes;
+  final FirebaseApp app;
 
-  MyApp({Key key, this.memes}) : super(key: key);
+  MyApp({Key key, this.memes, this.app}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +39,7 @@ class MyApp extends StatelessWidget {
         primaryColor: Colors.purple[900],
         canvasColor: Colors.purple[100],
       ),
-      home: Home(),
+      home: Home(app: app),
     );
   }
 }
